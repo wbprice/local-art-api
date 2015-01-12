@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "hapi": "^8.0.0"
+    "query-overpass": "1.0.0",
+    "underscore": "1.7.0",
   }
   "scripts": {
     "start": "node server.js"
