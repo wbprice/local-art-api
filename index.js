@@ -15,7 +15,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 var Hapi = require('hapi');
-var Path = require('Path');
 var queryOverpass = require('query-overpass');
 var _ = require('underscore');
 
