@@ -15,6 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 var Hapi = require('hapi');
+var Path = require('Path');
 var queryOverpass = require('query-overpass');
 var _ = require('underscore');
 
@@ -23,12 +24,43 @@ var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || 'localhost';
 
 // Create server with host and port;
 var server = new Hapi.Server();
+
 server.connection({
 	host: server_ip_address,
 	port: server_port,
 });
 
-// Add the route
+server.views({
+	engines: {
+		html: require('handlebars'),
+	},
+	path: __dirname + '/templates'
+});
+
+// Add the routes
+
+// Reference Route
+server.route({
+	method: 'GET',
+	path: '/',
+	handler: function(request, reply) {
+		reply.view('index');
+	}
+});
+
+server.route({
+	method: 'GET',
+	path: '/templates/{path*}',
+	handler: {
+		directory: {
+			path: './templates',
+			listing: false,
+			index: false
+		}
+	}
+});
+
+// Exhibits Route
 server.route({
 	method: 'GET',
 	path: '/exhibits',
