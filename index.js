@@ -15,6 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 var Hapi = require('hapi');
+var Path = require('Path');
 var queryOverpass = require('query-overpass');
 var _ = require('underscore');
 
@@ -23,12 +24,43 @@ var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || 'localhost';
 
 // Create server with host and port;
 var server = new Hapi.Server();
+
 server.connection({
 	host: server_ip_address,
 	port: server_port,
 });
 
-// Add the route
+server.views({
+	engines: {
+		html: require('handlebars'),
+	},
+	path: __dirname + '/templates'
+});
+
+// Add the routes
+
+// Reference Route
+server.route({
+	method: 'GET',
+	path: '/',
+	handler: function(request, reply) {
+		reply.view('index');
+	}
+});
+
+server.route({
+	method: 'GET',
+	path: '/templates/{path*}',
+	handler: {
+		directory: {
+			path: './templates',
+			listing: false,
+			index: false
+		}
+	}
+});
+
+// Exhibits Route
 server.route({
 	method: 'GET',
 	path: '/exhibits',
@@ -42,14 +74,14 @@ server.route({
 		// Given a bounding box, return some results.
 		if (request.url.query.bbox) {
 			bbox = request.url.query.bbox;
-			query = '[out:json];node(' + bbox + ')[tourism=artwork];out;'
+			query = '[out:json];node(' + bbox + ')[tourism=artwork];out;';
 		} else if (!request.url.query.bbox) {
 			// If no bounding box is provided, assume Norfolk.
 			// tk do some response limiting here with query string in app
-			// or by getting long/lat from request source IP.
+			// or by getting long/lfat from request source IP.
 			bbox = '36.75,-76.44,36.98,-76.13';
-			query = '[out:json];node(' + bbox + ')[tourism=artwork];out;'
-		};
+			query = '[out:json];node(' + bbox + ')[tourism=artwork];out;';
+		}
 
 		// Alternatively, use latitude and longitude.
 		if (request.url.query.longitude &&
@@ -85,7 +117,7 @@ server.route({
 				_.each(data.features, function(element, index) {
 
 					properties = element.properties;
-					tags = properties.tags
+					tags = properties.tags;
 					geometry = element.geometry;
 
 					formattedResponse.push({
