@@ -22,10 +22,12 @@ var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || 'localhost';
 
 // Create server with host and port;
-var server = new Hapi.Server();
+var server = new Hapi.Server({
+	cors: true
+});
 server.connection({
 	host: server_ip_address,
-	port: server_port
+	port: server_port,
 });
 
 // Add the route
