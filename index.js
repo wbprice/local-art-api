@@ -102,7 +102,7 @@ server.route({
 
 				});
 
-				reply(formattedResponse);
+				reply({exhibit: formattedResponse});
 
 			}
 		);
