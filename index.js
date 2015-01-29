@@ -69,12 +69,13 @@ server.route({
         cors: true
     },      
     handler: function(request, reply) {
+        'use strict';
         var bbox, longitude, latitude, numberOfResults, zoomLevel, query;
         
         // Given a bounding box, return some results.
         if (request.url.query.bbox) {
             bbox = request.url.query.bbox;
-            query = '[out:json];node(' + bbox + ')[tourism=artwork];out;'
+            query = '[out:json];node(' + bbox + ')[tourism=artwork];out;';
         } else {
             // If no bounding box is provided, assume Norfolk.
             // tk do some response limiting here with query string in app
@@ -113,7 +114,7 @@ server.route({
 
             _.each(data.features, function(element, index) {
                 properties = element.properties;
-                tags = properties.tags
+                tags = properties.tags;
                 geometry = element.geometry;
 
                 formattedResponse.push({
