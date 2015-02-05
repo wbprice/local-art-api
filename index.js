@@ -207,7 +207,15 @@ server.route({
     handler: function(request, reply) {
         console.log(request.params);
         var requestedImage = request.params.id;
-        reply(requestedImage);
+
+        Exhibit.find({node: requestedImage},function(err, exhibits) {
+            if (err) {
+                return console.error(err);
+            } else {
+                reply(exhibits);
+            }
+        }); 
+
     }
 });
 
