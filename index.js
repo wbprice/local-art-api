@@ -25,9 +25,7 @@ var _ = require('underscore');
 
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || 'localhost';
-var database_address = 
-    process.env.MONGO_THING_IDK ||
-    'localhost:27017/localartapi';
+var database_address = 'localhost:27017/localartapi';
 var db;
 
 mongoose.connect(database_address);
