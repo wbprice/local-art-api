@@ -29,7 +29,12 @@ var database_address =  process.env.MONGO_ADDR || 'localhost:27017/localartapi';
 var auth = process.env.MONGO_USER + ':' + process.env.MONGO_PASS;
 var db;
 
-mongoose.connect('mongodb://' + auth + '@' + database_address);
+if (process.env.MONGO_USER) {
+    mongoose.connect('mongodb://' + auth + '@' + database_address);
+} else {
+    mongoose.connect(database_address);
+}
+
 db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error'));
